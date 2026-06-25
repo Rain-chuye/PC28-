@@ -1,0 +1,5 @@
+/* Optimization: Moving repetitive styles to a dedicated file */
+:root { --p-indigo: #4f46e5; --p-blue: #2563eb; --p-rose: #f43f5e; }
+body { -webkit-tap-highlight-color: transparent; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.card-premium { background: white; border-radius: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }

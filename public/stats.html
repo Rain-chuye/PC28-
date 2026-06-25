@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>数据报表分析 - PC28</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f8fafc; font-family: -apple-system, sans-serif; }
+        .card { background: white; border-radius: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; }
+    </style>
+</head>
+<body class="p-6 pb-24">
+    <header class="flex items-center gap-4 mb-8">
+        <button onclick="history.back()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-400 shadow-sm"><i class="fas fa-chevron-left text-xs"></i></button>
+        <h1 class="text-xl font-black text-slate-800">报表分析</h1>
+    </header>
+
+    <div class="space-y-6">
+        <div class="card p-6">
+            <h3 class="text-[10px] font-black text-slate-400 uppercase mb-6 tracking-widest">近 7 日财务趋势 (充值/流水/提现)</h3>
+            <canvas id="mainChart" height="200"></canvas>
+        </div>
+
+        <div class="card p-6">
+            <h3 class="text-[10px] font-black text-slate-400 uppercase mb-6 tracking-widest">下注偏好分析 (组合 vs 基础)</h3>
+            <div class="space-y-6">
+                <div id="pref-bars"></div>
+            </div>
+        </div>
+
+        <div class="card p-6">
+            <h3 class="text-[10px] font-black text-slate-400 uppercase mb-4 tracking-widest">今日统计摘要</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-blue-50 p-4 rounded-2xl">
+                    <p class="text-[9px] font-black text-blue-400 uppercase mb-1">今日流水</p>
+                    <p id="stat-turnover" class="text-lg font-black text-blue-600">¥ 0.00</p>
+                </div>
+                <div class="bg-emerald-50 p-4 rounded-2xl">
+                    <p class="text-[9px] font-black text-emerald-400 uppercase mb-1">盈亏统计</p>
+                    <p id="stat-profit" class="text-lg font-black text-emerald-600">¥ 0.00</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadStats() {
+            const res = await fetch('/api/user_stats.php').then(r => r.json());
+            if(res.success) {
+                const data = res.data;
+
+                // 1. Line/Bar Chart for Finance
+                const ctx = document.getElementById('mainChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.dates,
+                        datasets: [
+                            { label: '充值', data: data.deposits, backgroundColor: '#10b981', borderRadius: 6 },
+                            { label: '流水', data: data.turnovers, backgroundColor: '#3b82f6', borderRadius: 6 },
+                            { label: '提现', data: data.withdrawals, backgroundColor: '#f43f5e', borderRadius: 6 }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true, grid: { display: false }, ticks: { font: { size: 9, weight: 'bold' } } }, x: { grid: { display: false }, ticks: { font: { size: 9, weight: 'bold' } } } }
+                    }
+                });
+
+                // 2. Play Type Preference Bars
+                const prefContainer = document.getElementById('pref-bars');
+                const total = data.total_count || 1;
+                const combos = ['big_single','big_double','small_single','small_double'];
+                let comboCount = 0;
+                Object.entries(data.types).forEach(([type, count]) => { if(combos.includes(type)) comboCount += count; });
+                const comboPerc = Math.round((comboCount / total) * 100);
+                const basicPerc = 100 - comboPerc;
+
+                prefContainer.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-[10px] font-black uppercase text-slate-400"><span>组合类 (大单/小双等)</span><span>${comboPerc}%</span></div>
+                        <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-blue-600" style="width: ${comboPerc}%"></div></div>
+                    </div>
+                    <div class="space-y-2 mt-4">
+                        <div class="flex justify-between text-[10px] font-black uppercase text-slate-400"><span>基础类 (大小/特码等)</span><span>${basicPerc}%</span></div>
+                        <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-slate-300" style="width: ${basicPerc}%"></div></div>
+                    </div>
+                `;
+
+                document.getElementById('stat-turnover').innerText = '¥ ' + data.today_turnover.toLocaleString();
+                document.getElementById('stat-profit').innerText = '¥ ' + data.today_profit.toLocaleString();
+            }
+        }
+        loadStats();
+    </script>
+</body>
+</html>
