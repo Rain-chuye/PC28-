@@ -3,59 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>注册 - PC28</title>
+    <title>注册 - 东爷国际 PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>body { background-color: #f8fafc; font-family: -apple-system, sans-serif; }</style>
+    <style>
+        body { background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); font-family: -apple-system, sans-serif; }
+        .card-auth { background: white; border-radius: 3rem; border: 1px solid #e2e8f0; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05); }
+    </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6">
-    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-2xl text-sm font-bold shadow-2xl opacity-0 transition-opacity pointer-events-none z-50"></div>
+<body class="min-h-screen flex items-center justify-center p-6 py-12">
+    <div id="toast" class="fixed top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-8 py-4 rounded-2xl text-xs font-black shadow-2xl opacity-0 transition-all pointer-events-none z-50 uppercase tracking-widest"></div>
 
-    <div class="w-full max-w-sm bg-white rounded-[2.5rem] p-10 border border-slate-200 shadow-xl">
-        <h1 class="text-2xl font-black text-center mb-10 text-slate-800">创建新账户</h1>
-        <div class="space-y-5">
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl px-6 flex items-center">
-                <i class="fas fa-user-plus text-slate-300 text-xs"></i>
-                <input type="text" id="username" class="w-full bg-transparent px-4 py-4 outline-none text-sm font-bold" placeholder="设置登录账号">
+    <div class="w-full max-w-sm card-auth p-12 relative overflow-hidden">
+        <div class="relative z-10">
+            <h1 class="text-3xl font-black text-center mb-2 text-slate-800 tracking-tight">加入我们</h1>
+            <p class="text-slate-300 text-[10px] text-center mb-10 font-black uppercase tracking-[0.2em]">Create Premium Account</p>
+
+            <div class="space-y-4">
+                <div class="bg-slate-50 border border-slate-100 rounded-2xl px-6 flex items-center focus-within:border-blue-400 focus-within:bg-white transition-all">
+                    <i class="fas fa-user-plus text-slate-200 text-xs"></i>
+                    <input type="text" id="username" class="w-full bg-transparent px-4 py-4 outline-none text-sm font-black text-slate-700" placeholder="账号 / Username">
+                </div>
+                <div class="bg-slate-50 border border-slate-100 rounded-2xl px-6 flex items-center focus-within:border-blue-400 focus-within:bg-white transition-all">
+                    <i class="fas fa-id-card text-slate-200 text-xs"></i>
+                    <input type="text" id="nickname" class="w-full bg-transparent px-4 py-4 outline-none text-sm font-black text-slate-700" placeholder="昵称 / Nickname">
+                </div>
+                <div class="bg-slate-50 border border-slate-100 rounded-2xl px-6 flex items-center focus-within:border-blue-400 focus-within:bg-white transition-all">
+                    <i class="fas fa-lock text-slate-200 text-xs"></i>
+                    <input type="password" id="password" class="w-full bg-transparent px-4 py-4 outline-none text-sm font-black text-slate-700" placeholder="密码 / Password">
+                </div>
+                <div class="bg-slate-50 border border-slate-100 rounded-2xl px-6 flex items-center focus-within:border-blue-400 focus-within:bg-white transition-all">
+                    <i class="fab fa-qq text-slate-200 text-xs"></i>
+                    <input type="text" id="qq" class="w-full bg-transparent px-4 py-4 outline-none text-sm font-black text-slate-700" placeholder="QQ 号 / QQ Number">
+                </div>
+                <div class="bg-slate-50 border border-slate-100 rounded-2xl px-6 flex items-center focus-within:border-blue-400 focus-within:bg-white transition-all">
+                    <i class="fas fa-gift text-slate-200 text-xs"></i>
+                    <input type="text" id="inviter_id" class="w-full bg-transparent px-4 py-4 outline-none text-sm font-black text-slate-700" placeholder="邀请码 (可选)">
+                </div>
+                <button id="regBtn" onclick="register()" class="w-full bg-blue-600 text-white py-5 rounded-[1.5rem] font-black shadow-xl shadow-blue-100 active:scale-95 transition-all text-sm uppercase tracking-widest mt-4">
+                    立即开通
+                </button>
             </div>
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl px-6 flex items-center">
-                <i class="fas fa-id-card text-slate-300 text-xs"></i>
-                <input type="text" id="nickname" class="w-full bg-transparent px-4 py-4 outline-none text-sm font-bold" placeholder="设置您的昵称">
-            </div>
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl px-6 flex items-center">
-                <i class="fas fa-lock text-slate-300 text-xs"></i>
-                <input type="password" id="password" class="w-full bg-transparent px-4 py-4 outline-none text-sm font-bold" placeholder="设置密码">
-            </div>
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl px-6 flex items-center">
-                <i class="fab fa-qq text-slate-300 text-xs"></i>
-                <input type="text" id="qq" class="w-full bg-transparent px-4 py-4 outline-none text-sm font-bold" placeholder="QQ号 (找回密码凭证)">
-            </div>
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl px-6 flex items-center">
-                <i class="fas fa-gift text-slate-300 text-xs"></i>
-                <input type="text" id="inviter_id" class="w-full bg-transparent px-4 py-4 outline-none text-sm font-bold" placeholder="邀请码 (可选)">
-            </div>
-            <button id="regBtn" onclick="register()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg active:scale-95 transition-all">立即注册</button>
+
+            <p class="mt-10 text-center text-[10px] font-black text-slate-400 uppercase">已有账号？ <a href="/login.html" class="text-blue-600 ml-1">前往登录</a></p>
         </div>
-        <p class="mt-8 text-center text-xs text-slate-400 font-bold">已有账号？ <a href="/login.html" class="text-blue-600">返回登录</a></p>
+        <i class="fas fa-shield-alt absolute -right-6 -top-6 text-9xl text-slate-50 rotate-12"></i>
     </div>
+
     <script>
         function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.innerText = msg;
-            t.classList.remove('opacity-0');
-            setTimeout(() => t.classList.add('opacity-0'), 3000);
+            const t = document.getElementById('toast'); t.innerText = msg;
+            t.classList.remove('opacity-0', 'top-10'); t.classList.add('top-12');
+            setTimeout(() => { t.classList.add('opacity-0', 'top-10'); t.classList.remove('top-12'); }, 3000);
         }
-
-        (function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const ref = urlParams.get('ref');
-            if(ref) {
-                window.addEventListener('DOMContentLoaded', () => {
-                    const i = document.getElementById('inviter_id');
-                    if(i) { i.value = ref; i.readOnly = true; }
-                });
-            }
-        })();
 
         async function register() {
             const u = document.getElementById('username').value.trim();
@@ -66,27 +66,18 @@
 
             if(!u || !n || !p || !q) return showToast('请填写完整信息');
 
-            const btn = document.getElementById('regBtn');
-            btn.disabled = true;
+            const btn = document.getElementById('regBtn'); btn.disabled = true;
 
             try {
                 const res = await fetch('/api/register.php', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({username: u, nickname: n, password: p, qq: q, inviter_id: r})
                 }).then(r => r.json());
 
-                if(res.success) {
-                    alert('注册成功，请登录');
-                    location.href = '/login.html';
-                } else {
-                    showToast(res.message);
-                }
-            } catch (err) {
-                showToast('网络错误');
-            } finally {
-                btn.disabled = false;
-            }
+                if(res.success) { alert('注册成功，欢迎加入！'); location.href = '/login.html'; }
+                else showToast(res.message);
+            } catch (err) { showToast('服务异常'); }
+            btn.disabled = false;
         }
     </script>
 </body>

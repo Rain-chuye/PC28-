@@ -3,90 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>加拿大28至尊 - 实时</title>
+    <title>加拿大28 Pro - 实时</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root { --p-blue: #2563eb; }
-        body { background-color: #f8fafc; font-family: -apple-system, system-ui, sans-serif; height: 100vh; overflow: hidden; }
-        .ball { width: 28px; height: 28px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; color: #1e293b; border: 1px solid #e2e8f0; }
-        .ball-sum { background: var(--p-blue); color: white; border: none; }
-        .tab-content { transition: max-height 0.3s ease; max-height: 0; overflow: hidden; background: white; margin-top: 10px; border-radius: 12px; }
-        .tab-content.active { max-height: 250px; border: 1px solid #e2e8f0; padding: 8px; }
-        .scratch-card { background: #1e293b; border-radius: 12px; position: relative; height: 80px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin: 4px; }
+        body { background-color: #f1f5f9; font-family: -apple-system, sans-serif; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        .premium-header { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); color: white; }
+        .ball { width: 32px; height: 32px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; color: #1e293b; border: 2px solid rgba(255,255,255,0.2); }
+        .ball-sum { background: #fbbf24; color: #1e293b; border: none; }
+        .tab-panel { transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-height: 0; overflow: hidden; background: white; margin-top: 12px; border-radius: 1.5rem; }
+        .tab-panel.active { max-height: 300px; padding: 12px; border: 1px solid #e2e8f0; }
+        .scratch-box { background: rgba(0,0,0,0.2); border-radius: 1.5rem; position: relative; height: 90px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1); }
         #scratch-canvas { position: absolute; inset: 0; z-index: 10; cursor: crosshair; }
-        .bet-grid-item { background: #f1f5f9; border-radius: 10px; padding: 12px 0; text-align: center; border: 1px solid transparent; cursor: pointer; transition: 0.2s; }
-        .bet-grid-item.active { border-color: var(--p-blue); background: #eff6ff; color: var(--p-blue); }
+        .bet-grid-item { background: #f8fafc; border-radius: 1.25rem; padding: 14px 0; text-align: center; border: 2px solid transparent; cursor: pointer; transition: 0.2s; }
+        .bet-grid-item.active { border-color: var(--p-blue); background: #eff6ff; }
+        .bet-grid-item.active p:first-child { color: var(--p-blue); font-weight: 900; }
+        #timer-badge { background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); border-radius: 99px; padding: 4px 12px; font-size: 10px; font-weight: 900; }
     </style>
 </head>
-<body class="flex flex-col">
-    <!-- Header -->
-    <header class="p-3 bg-white shadow-sm shrink-0">
-        <div class="flex justify-between items-center mb-3">
-            <div class="flex items-center gap-2">
-                <button onclick="history.back()"><i class="fas fa-chevron-left text-slate-300"></i></button>
-                <span id="room-name" class="font-black text-sm">正在载入房型...</span>
+<body>
+    <header class="premium-header p-6 shrink-0 shadow-2xl relative overflow-hidden">
+        <div class="flex justify-between items-center mb-6 relative z-10">
+            <div class="flex items-center gap-4">
+                <button onclick="history.back()" class="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center border border-white/10"><i class="fas fa-chevron-left text-sm"></i></button>
+                <div>
+                    <h1 id="room-name" class="font-black text-sm">LOADING...</h1>
+                    <span id="issue-val" class="text-[9px] font-black opacity-60 uppercase tracking-widest">ISSUE #--</span>
+                </div>
             </div>
-            <div class="flex gap-2">
-                <span id="balance-val" class="text-[10px] font-black text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">¥ 0.00</span>
-                <span id="issue-val" class="text-[10px] font-black text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full border">期号: --</span>
-            </div>
+            <div id="timer-badge">--:--</div>
         </div>
 
-        <!-- Squeezing Area (咪牌) -->
-        <div class="scratch-card">
+        <div class="scratch-box relative z-10">
             <canvas id="scratch-canvas"></canvas>
-            <div class="flex items-center gap-1 z-0">
-                <div class="ball" id="b0">-</div><span class="text-slate-500 font-bold">+</span>
-                <div class="ball" id="b1">-</div><span class="text-slate-500 font-bold">+</span>
-                <div class="ball" id="b2">-</div><span class="text-slate-500 font-bold">=</span>
+            <div class="flex items-center gap-2 z-0">
+                <div class="ball" id="b0">-</div><span class="text-white/30 font-black">+</span>
+                <div class="ball" id="b1">-</div><span class="text-white/30 font-black">+</span>
+                <div class="ball" id="b2">-</div><span class="text-white/30 font-black">=</span>
                 <div class="ball ball-sum" id="bsum">-</div>
-                <div id="tags-area" class="flex gap-1 ml-2"></div>
+                <div id="tags-area" class="flex gap-1.5 ml-2"></div>
             </div>
         </div>
 
-        <div id="timer-text" class="text-center text-[10px] font-black text-slate-400 py-2 uppercase tracking-tighter">--:--</div>
-
-        <!-- Tabs -->
-        <div class="flex gap-2">
-            <button onclick="switchTab('history')" id="btn-h" class="flex-1 py-2 bg-slate-50 rounded-xl text-[10px] font-black text-slate-400 border border-slate-100">历史走势</button>
-            <button onclick="switchTab('bets')" id="btn-m" class="flex-1 py-2 bg-slate-50 rounded-xl text-[10px] font-black text-slate-400 border border-slate-100">当前投注</button>
+        <div class="flex gap-3 relative z-10">
+            <button onclick="switchTab('history')" id="btn-h" class="flex-1 py-3 bg-white/10 rounded-2xl text-[10px] font-black border border-white/10">历史走势</button>
+            <button onclick="switchTab('bets')" id="btn-m" class="flex-1 py-3 bg-white/10 rounded-2xl text-[10px] font-black border border-white/10">当前投注</button>
         </div>
 
-        <div id="panel-history" class="tab-content"><div id="list-h" class="space-y-1 overflow-y-auto max-h-40 p-1"></div></div>
-        <div id="panel-bets" class="tab-content"><div id="list-m" class="space-y-1 overflow-y-auto max-h-40 p-1"></div></div>
+        <div id="panel-history" class="tab-panel"><div id="list-h" class="space-y-1.5 overflow-y-auto max-h-48 p-1"></div></div>
+        <div id="panel-bets" class="tab-panel"><div id="list-m" class="space-y-1.5 overflow-y-auto max-h-48 p-1 text-slate-800"></div></div>
+
+        <i class="fas fa-dice-d20 absolute -right-6 -bottom-6 text-9xl opacity-5 rotate-12"></i>
     </header>
 
-    <!-- Chat -->
-    <main class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50" id="chat-container"></main>
+    <main class="flex-1 overflow-y-auto p-5 space-y-5 bg-slate-50/50" id="chat-container"></main>
 
-    <!-- Footer Actions -->
-    <footer class="p-3 bg-white border-t flex gap-2">
-        <button onclick="document.getElementById('bet-modal').classList.add('active')" class="flex-[2] bg-blue-600 text-white h-12 rounded-xl font-black text-xs shadow-lg shadow-blue-100">立即下注</button>
-        <button onclick="location.href='/recharge.html'" class="flex-1 bg-emerald-500 text-white rounded-xl text-[10px] font-black">充值</button>
-        <button onclick="location.href='/withdraw.html'" class="flex-1 bg-rose-500 text-white rounded-xl text-[10px] font-black">回分</button>
+    <footer class="p-5 bg-white border-t border-slate-100 flex gap-3 shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
+        <button onclick="document.getElementById('bet-modal').classList.add('translate-y-0')" class="flex-[2] bg-blue-600 text-white h-14 rounded-2xl font-black text-xs shadow-xl shadow-blue-100 active:scale-95 transition-all">立即下单</button>
+        <button onclick="location.href='/recharge.html'" class="flex-1 bg-white border border-slate-200 rounded-2xl text-[10px] font-black text-slate-500">充值</button>
+        <button onclick="location.href='/withdraw.html'" class="flex-1 bg-white border border-slate-200 rounded-2xl text-[10px] font-black text-slate-500">回分</button>
     </footer>
 
-    <!-- Betting Modal -->
-    <div id="bet-modal" class="fixed inset-x-0 bottom-0 bg-white z-[500] translate-y-full transition-transform rounded-t-[2rem] shadow-2xl flex flex-col h-[75vh]">
-        <div class="p-5 border-b flex justify-between items-center">
-            <h3 class="font-black text-sm text-slate-800">投注中心</h3>
-            <button onclick="document.getElementById('bet-modal').classList.remove('active')"><i class="fas fa-times text-slate-300"></i></button>
-        </div>
-        <div class="flex-1 overflow-y-auto p-5"><div class="grid grid-cols-4 gap-2" id="odds-grid"></div></div>
-        <div class="p-6 bg-slate-50 border-t space-y-4">
-            <div class="bg-white rounded-xl p-3 flex items-center border border-slate-200">
-                <span class="text-[10px] font-black text-slate-300 mr-3">金额</span>
-                <input type="number" id="bet-amt" class="w-full font-black text-slate-800 outline-none" value="10">
+    <div id="bet-modal" class="fixed inset-x-0 bottom-0 bg-white z-[500] translate-y-full transition-transform duration-500 rounded-t-[3rem] shadow-2xl flex flex-col h-[80vh]">
+        <div class="p-8 border-b border-slate-50 flex justify-between items-center">
+            <div>
+                <h3 class="font-black text-lg text-slate-800">投注中心</h3>
+                <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest">Select your plays</p>
             </div>
-            <button onclick="submitAll()" class="w-full py-4 bg-blue-600 text-white rounded-xl font-black text-sm">确认下单 (<span id="sel-count">0</span>)</button>
+            <button onclick="document.getElementById('bet-modal').classList.remove('translate-y-0')" class="w-12 h-12 rounded-2xl bg-slate-50 text-slate-300 flex items-center justify-center"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-8"><div class="grid grid-cols-3 gap-3" id="odds-grid"></div></div>
+        <div class="p-8 bg-slate-50 border-t space-y-5">
+            <div class="bg-white rounded-2xl p-5 flex items-center border border-slate-100 shadow-sm">
+                <span class="text-[10px] font-black text-slate-300 mr-4 uppercase tracking-widest">Amount</span>
+                <input type="number" id="bet-amt" class="w-full font-black text-slate-800 outline-none text-lg" value="10">
+            </div>
+            <button onclick="submitAll()" class="w-full py-5 bg-blue-600 text-white rounded-[1.5rem] font-black text-sm shadow-xl shadow-blue-200">确认下单 (<span id="sel-count">0</span> 项)</button>
         </div>
     </div>
 
     <script>
         const roomType = new URLSearchParams(window.location.search).get('room') || 'high';
-        document.getElementById('room-name').innerText = roomType === 'high' ? '加拿大至尊高倍' : '加拿大标准房';
+        document.getElementById('room-name').innerText = roomType === 'high' ? '至尊高倍房' : '经典标准房';
 
         let selected = new Set(), currentIssue = '', lastIssue = '', countdown = 0;
         const cvs = document.getElementById('scratch-canvas'), ctx = cvs.getContext('2d');
@@ -94,22 +94,22 @@
         function initCanvas() {
             cvs.width = cvs.offsetWidth; cvs.height = cvs.offsetHeight;
             ctx.fillStyle = '#475569'; ctx.fillRect(0,0,cvs.width,cvs.height);
-            ctx.fillStyle = 'white'; ctx.font = '900 12px Inter'; ctx.textAlign = 'center'; ctx.fillText('左右对称揭晓 (咪牌)', cvs.width/2, cvs.height/2 + 5);
+            ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.font = '900 11px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('左右对称咪牌揭晓', cvs.width/2, cvs.height/2 + 4);
             ctx.globalCompositeOperation = 'destination-out';
         }
 
         cvs.addEventListener('touchmove', e => {
             e.preventDefault(); const r = cvs.getBoundingClientRect();
             const x = e.touches[0].clientX - r.left, y = e.touches[0].clientY - r.top;
-            ctx.beginPath(); ctx.arc(x,y,20,0,Math.PI*2); ctx.fill();
-            ctx.beginPath(); ctx.arc(cvs.width - x, y, 20, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(x,y,22,0,Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(cvs.width - x, y, 22, 0, Math.PI*2); ctx.fill();
         });
 
         function switchTab(t) {
             const h = document.getElementById('panel-history'), m = document.getElementById('panel-bets');
             const bh = document.getElementById('btn-h'), bm = document.getElementById('btn-m');
-            if(t === 'history') { h.classList.toggle('active'); m.classList.remove('active'); bh.classList.toggle('active'); bm.classList.remove('active'); }
-            else { m.classList.toggle('active'); h.classList.remove('active'); bm.classList.toggle('active'); bh.classList.remove('active'); if(m.classList.contains('active')) loadUserBets(); }
+            if(t === 'history') { h.classList.toggle('active'); m.classList.remove('active'); bh.classList.toggle('bg-white/30'); bm.classList.remove('bg-white/30'); }
+            else { m.classList.toggle('active'); h.classList.remove('active'); bm.classList.toggle('bg-white/30'); bh.classList.remove('bg-white/30'); if(m.classList.contains('active')) loadUserBets(); }
         }
 
         async function loadUserBets() {
@@ -117,54 +117,47 @@
             const list = document.getElementById('list-m');
             if(res.success) {
                 const cur = res.data.filter(b => b.issue_no === currentIssue && b.status == 0);
-                if(cur.length === 0) { list.innerHTML = '<p class="text-center py-6 text-[10px] text-slate-300 font-bold uppercase tracking-widest">暂无当前投注</p>'; return; }
+                if(cur.length === 0) { list.innerHTML = '<p class="text-center py-10 text-[10px] text-slate-300 font-black uppercase tracking-widest italic">No Current Bets</p>'; return; }
                 const map = {'big':'大','small':'小','single':'单','double':'双','big_single':'大单','big_double':'大双','small_single':'小单','small_double':'小双','triple':'豹子','straight':'顺子','pair':'对子'};
                 list.innerHTML = cur.map(b => `
-                    <div class="flex justify-between items-center p-3 bg-white border border-slate-100 rounded-xl mb-1 shadow-sm">
-                        <div><p class="text-[10px] font-black text-slate-800">${map[b.play_type] || b.play_type} <span class="text-blue-600 ml-1">¥${parseFloat(b.bet_amount)}</span></p></div>
-                        <button onclick="cancelOrder(${b.id})" class="px-4 py-1.5 bg-rose-50 text-rose-500 rounded-lg text-[10px] font-black border border-rose-100">撤单</button>
+                    <div class="flex justify-between items-center p-4 bg-slate-50 rounded-2xl mb-1">
+                        <div><p class="text-xs font-black text-slate-800">${map[b.play_type] || b.play_type} <span class="text-blue-600 ml-2">¥${parseFloat(b.bet_amount)}</span></p></div>
+                        <button onclick="cancelOrder(${b.id})" class="px-5 py-2 bg-rose-50 text-rose-500 rounded-xl text-[10px] font-black border border-rose-100">撤单</button>
                     </div>
                 `).join('');
             }
         }
 
         async function cancelOrder(id) {
-            if(!confirm('确定要撤回这笔下单吗？将全额退款。')) return;
-            const res = await fetch('/api/cancel_bet.php', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ bet_id: id })
-            }).then(r => r.json());
+            if(!confirm('确定要撤回下单吗？资金将实时返还。')) return;
+            const res = await fetch('/api/cancel_bet.php', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ bet_id: id }) }).then(r => r.json());
             if(res.success) { loadUserBets(); poll(); } else alert(res.message);
         }
 
         async function poll() {
             try {
-                const r = await fetch('/api/lottery.php').then(r=>r.json());
-                const u = await fetch('/api/user_info.php').then(r=>r.json());
+                const [r, u] = await Promise.all([ fetch('/api/lottery.php').then(r=>r.json()), fetch('/api/user_info.php').then(r=>r.json()) ]);
                 if(r.success) {
-                    if(lastIssue && lastIssue !== r.latest.issue_no) { initCanvas(); lastIssue = r.latest.issue_no; }
-                    else if(!lastIssue) { lastIssue = r.latest.issue_no; initCanvas(); }
-                    currentIssue = r.bet_issue_no; document.getElementById('issue-val').innerText = '期号: ' + currentIssue;
+                    if(lastIssue !== r.latest.issue_no) { initCanvas(); lastIssue = r.latest.issue_no; }
+                    currentIssue = r.bet_issue_no; document.getElementById('issue-val').innerText = 'Issue #' + currentIssue;
                     const n = r.latest.numbers.split(',').map(v=>parseInt(v));
                     document.getElementById('b0').innerText = n[0]; document.getElementById('b1').innerText = n[1]; document.getElementById('b2').innerText = n[2];
                     document.getElementById('bsum').innerText = r.latest.total_sum;
-                    document.getElementById('tags-area').innerHTML = [parseInt(r.latest.total_sum) >= 14 ? '大' : '小', parseInt(r.latest.total_sum) % 2 != 0 ? '单' : '双'].map(t=>`<span class="px-1.5 py-0.5 bg-slate-400 text-white rounded text-[8px] font-black ${t==='大'?'bg-blue-600':''}">${t}</span>`).join('');
+                    document.getElementById('tags-area').innerHTML = [parseInt(r.latest.total_sum) >= 14 ? '大' : '小', parseInt(r.latest.total_sum) % 2 != 0 ? '单' : '双'].map(t=>`<span class="px-2 py-0.5 bg-white/20 text-white rounded text-[8px] font-black uppercase tracking-tighter">${t}</span>`).join('');
                     countdown = r.countdown; startTimer();
                     if(r.history) {
                         document.getElementById('list-h').innerHTML = r.history.map(h => `
-                            <div class="flex justify-between items-center p-2 bg-white border border-slate-50 rounded-lg mb-1 shadow-sm">
-                                <span class="text-[9px] text-slate-400 font-black">#${h.issue_no}</span>
-                                <div class="flex gap-2 items-center">
-                                    <div class="flex gap-0.5">${h.numbers.split(',').map(v=>`<span class="w-5 h-5 bg-slate-50 rounded-full flex items-center justify-center text-[9px] font-black border">${v}</span>`).join('')}</div>
-                                    <span class="text-[10px] font-black text-blue-600 w-6 text-right">${h.total_sum}</span>
+                            <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl mb-1 text-slate-800">
+                                <span class="text-[9px] text-slate-300 font-black">#${h.issue_no}</span>
+                                <div class="flex gap-3 items-center">
+                                    <div class="flex gap-1">${h.numbers.split(',').map(v=>`<span class="w-6 h-6 bg-white border border-slate-100 rounded-full flex items-center justify-center text-[9px] font-black">${v}</span>`).join('')}</div>
+                                    <span class="text-xs font-black text-blue-600 w-6 text-right">${h.total_sum}</span>
                                 </div>
                             </div>
                         `).join('');
                     }
                     if(r.odds) renderOdds(r.odds);
                 }
-                if(u.success) document.getElementById('balance-val').innerText = '¥ ' + parseFloat(u.data.balance).toLocaleString();
                 loadChat();
             } catch(e) {}
         }
@@ -174,7 +167,9 @@
             window.tm = setInterval(() => {
                 if(countdown <= 0) { clearInterval(window.tm); return; }
                 countdown--; const m = Math.floor(countdown/60), s = countdown%60;
-                document.getElementById('timer-text').innerHTML = countdown <= 20 ? '<span class="text-rose-500 font-black tracking-widest">封盘中</span>' : `NEXT DRAW: <span class="text-blue-600 font-black">${m}:${s<10?'0':''}${s}</span>`;
+                const badge = document.getElementById('timer-badge');
+                if(countdown <= 20) { badge.innerHTML = '<span class="text-rose-400">WAITING...</span>'; badge.classList.add('animate-pulse'); }
+                else { badge.innerHTML = `${m}:${s<10?'0':''}${s}`; badge.classList.remove('animate-pulse'); }
             }, 1000);
         }
 
@@ -183,11 +178,11 @@
             if(r.success) {
                 const box = document.getElementById('chat-container'); const wasBottom = box.scrollHeight - box.scrollTop <= box.clientHeight + 100;
                 box.innerHTML = r.data.map(m => `
-                    <div class="flex items-start gap-2.5">
-                        <img src="${m.avatar || '/assets/default_avatar.png'}" class="w-8 h-8 rounded-lg object-cover shadow-sm">
+                    <div class="flex items-start gap-4">
+                        <img src="${m.avatar || '/assets/default_avatar.png'}" class="w-10 h-10 rounded-2xl object-cover shadow-sm border-2 border-white">
                         <div class="flex-1">
-                            <p class="text-[8px] font-black text-slate-400 mb-0.5 uppercase tracking-tighter">${m.username}</p>
-                            <div class="bg-white border border-slate-100 p-2.5 rounded-2xl rounded-tl-none text-[11px] shadow-sm inline-block font-bold text-slate-700">${m.message}</div>
+                            <p class="text-[8px] font-black text-slate-300 mb-1 uppercase tracking-widest">${m.username}</p>
+                            <div class="bg-white border border-slate-100 p-4 rounded-3xl rounded-tl-none text-xs shadow-sm inline-block font-bold text-slate-700 leading-relaxed">${m.message}</div>
                         </div>
                     </div>
                 `).join('');
@@ -202,22 +197,21 @@
             keys.forEach(k => {
                 const div = document.createElement('div'); div.className = 'bet-grid-item' + (selected.has(k) ? ' active' : '');
                 div.onclick = () => { if(selected.has(k)) { selected.delete(k); div.classList.remove('active'); } else { selected.add(k); div.classList.add('active'); } document.getElementById('sel-count').innerText = selected.size; };
-                div.innerHTML = `<p class="text-xs">${names[k]}</p><p class="text-[8px] opacity-40 mt-1">${odds[k][roomType].toFixed(2)}</p>`;
+                div.innerHTML = `<p class="text-sm font-bold text-slate-700">${names[k]}</p><p class="text-[9px] font-black text-blue-400 mt-1 uppercase opacity-60">${odds[k][roomType].toFixed(2)}</p>`;
                 g.appendChild(div);
             });
         }
 
         async function submitAll() {
-            const a = document.getElementById('bet-amt').value; if(selected.size === 0) return alert('请先选择玩法');
+            const a = document.getElementById('bet-amt').value; if(selected.size === 0) return alert('请选择投注项目');
             const res = await fetch('/api/bet.php', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ bets: Array.from(selected).map(t => ({play_type: t, amount: a})), odds_type: roomType, issue_no: currentIssue })
             }).then(r => r.json());
-            if(res.success) { selected.clear(); document.getElementById('sel-count').innerText = 0; document.getElementById('bet-modal').classList.remove('active'); poll(); } else alert(res.message);
+            if(res.success) { selected.clear(); document.getElementById('sel-count').innerText = 0; document.getElementById('bet-modal').classList.remove('translate-y-0'); poll(); } else alert(res.message);
         }
 
-        window.onload = () => { initCanvas(); poll(); setInterval(poll, 2000); };
+        window.onload = () => { initCanvas(); poll(); setInterval(poll, 3000); };
     </script>
 </body>
 </html>

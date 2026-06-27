@@ -3,61 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>申请回分 - PC28</title>
+    <title>申请回分 - 东爷国际</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #f8fafc; font-family: -apple-system, sans-serif; }
-        .card { background: white; border-radius: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; }
+        body { background-color: #f1f5f9; font-family: -apple-system, sans-serif; }
+        .card-p { background: white; border-radius: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; }
     </style>
 </head>
-<body class="p-6">
-    <header class="flex items-center gap-4 mb-8">
-        <button onclick="history.back()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-400 shadow-sm"><i class="fas fa-chevron-left text-xs"></i></button>
-        <h1 class="text-xl font-black text-slate-800">申请回分 (提现)</h1>
+<body class="p-6 pb-12">
+    <header class="flex items-center justify-between mb-8">
+        <div class="flex items-center gap-4">
+            <button onclick="history.back()" class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-slate-400 shadow-sm border border-slate-100"><i class="fas fa-chevron-left text-sm"></i></button>
+            <div>
+                <h1 class="text-lg font-black text-slate-800">申请回分</h1>
+                <p class="text-[8px] font-black text-slate-300 uppercase tracking-widest">Withdraw Funds</p>
+            </div>
+        </div>
+        <i class="fas fa-university text-slate-200 text-3xl"></i>
     </header>
 
     <div class="space-y-6">
-        <div class="card p-6">
-            <h3 class="text-[10px] font-black text-slate-400 uppercase mb-4 tracking-widest">回分规则说明</h3>
-            <div class="space-y-3 text-xs font-bold text-slate-600 leading-relaxed">
-                <p>1. 单次最低回分为 100 积分。</p>
-                <p>2. 提现需满足总流水达到充值额的 4 倍。</p>
-                <p>3. 提现审核时间为 9:00 - 22:00，预计 30 分钟内到账。</p>
-                <p>4. 请务必确认支付宝/银行卡信息填写正确。</p>
+        <!-- Withdrawal Rules -->
+        <div class="card-p p-8 bg-blue-600 border-blue-500 shadow-xl shadow-blue-100 relative overflow-hidden">
+            <h3 class="text-[10px] font-black text-white/50 uppercase mb-4 tracking-widest relative z-10">Withdrawal Guidelines</h3>
+            <div class="space-y-4 text-xs font-bold text-white relative z-10 leading-relaxed">
+                <div class="flex items-start gap-3"><i class="fas fa-check-circle mt-0.5 opacity-50"></i><p>单次最低回分为 100 积分。</p></div>
+                <div class="flex items-start gap-3"><i class="fas fa-check-circle mt-0.5 opacity-50"></i><p>提现需满足总流水达到充值额的 4 倍。</p></div>
+                <div class="flex items-start gap-3"><i class="fas fa-check-circle mt-0.5 opacity-50"></i><p>审核时间 9:00 - 22:00，极速处理。</p></div>
             </div>
+            <i class="fas fa-shield-alt absolute -right-4 -bottom-4 text-8xl text-white/10 rotate-12"></i>
         </div>
 
-        <div class="card p-6 space-y-4">
-            <div>
-                <label class="text-[10px] font-black text-slate-300 uppercase mb-2 block">回分金额</label>
-                <input type="number" id="amount" class="w-full bg-slate-50 border border-slate-100 p-4 rounded-xl font-black text-slate-800 outline-none" placeholder="输入回分金额">
+        <!-- Form -->
+        <div class="card-p p-8 space-y-6">
+            <div class="space-y-3">
+                <label class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">回分金额</label>
+                <div class="relative flex items-center">
+                    <span class="absolute left-5 text-slate-300 font-black">¥</span>
+                    <input type="number" id="amount" class="w-full bg-slate-50 border border-slate-100 p-5 pl-10 rounded-2xl font-black text-slate-800 outline-none focus:border-blue-400 transition-colors" placeholder="0.00">
+                </div>
             </div>
-            <div>
-                <label class="text-[10px] font-black text-slate-300 uppercase mb-2 block">收款详情 (支付宝/银行卡)</label>
-                <textarea id="method" class="w-full bg-slate-50 border border-slate-100 p-4 rounded-xl font-black text-slate-800 outline-none h-24" placeholder="例如：支付宝 13800000000 张三"></textarea>
+
+            <div class="space-y-3">
+                <label class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">收款渠道 & 账号详情</label>
+                <textarea id="method" class="w-full bg-slate-50 border border-slate-100 p-5 rounded-2xl font-black text-slate-800 outline-none h-32 focus:border-blue-400 transition-colors" placeholder="例如：支付宝 13800000000 张三"></textarea>
             </div>
-            <button onclick="submitWithdraw()" class="w-full py-4 bg-rose-600 text-white rounded-xl font-black text-xs shadow-lg shadow-rose-100 mt-4">提交回分申请</button>
+
+            <button onclick="submitWithdraw()" class="w-full py-5 bg-rose-500 text-white rounded-[1.5rem] font-black text-sm shadow-xl shadow-rose-100 active:scale-95 transition-all">确认提交</button>
         </div>
     </div>
 
     <script>
         async function submitWithdraw() {
             const amount = document.getElementById('amount').value;
-            const method = document.getElementById('method').value;
+            const method = document.getElementById('method').value.trim();
             if(!amount || amount < 100) return alert('最低回分金额 100 元');
-            if(!method) return alert('请填写收款详情');
+            if(!method) return alert('请填写收款账号详情');
 
             const res = await fetch('/api/withdraw.php', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ amount, method })
             }).then(r => r.json());
 
-            if(res.success) {
-                alert('回分申请已提交，请等待财务审核');
-                history.back();
-            } else alert(res.message);
+            if(res.success) { alert('申请已提交，财务审核中'); history.back(); }
+            else alert(res.message);
         }
     </script>
 </body>

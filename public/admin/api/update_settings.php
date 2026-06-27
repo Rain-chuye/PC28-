@@ -1,29 +1,41 @@
 <?php
-require_once __DIR__ . '/../auth_logic.php';
-require_once __DIR__ . '/../../../src/Utils/DB.php';
-
+require_once __DIR__ . '/../check_auth.php';
+require_once __DIR__ . '/../../src/Utils/DB.php';
 header('Content-Type: application/json');
 
+$db = \App\Utils\DB::getInstance()->getConnection();
+
 try {
-    $db = \App\Utils\DB::getInstance()->getConnection();
+    $action = $_GET['action'] ?? 'update';
 
-    if (isset($_GET['action']) && $_GET['action'] === 'clear_chat') {
-        $db->exec("TRUNCATE TABLE group_messages");
-        $db->exec("TRUNCATE TABLE chat_messages");
-        echo json_encode(['success' => true, 'message' => '历史消息已全部清除']);
-    } else {
+    if ($action === 'update') {
         $data = json_decode(file_get_contents('php://input'), true);
+        if (!$data) throw new Exception("Invalid payload");
 
-        $db->beginTransaction();
-        foreach ($data as $key => $value) {
-            $stmt = $db->prepare("INSERT INTO system_settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)");
-            $stmt->execute([$key, $value]);
-        }
-        $db->commit();
+        $sql = "UPDATE system_settings SET
+                announcement = ?,
+                agent_link_prefix = ?,
+                custom_draw_interval = ?,
+                chat_mute_all = ?,
+                bot_auto_reply_enabled = ?,
+                login_announcement = ?
+                WHERE id = 1";
 
-        echo json_encode(['success' => true, 'message' => '设置已更新']);
+        $stmt = $db->prepare($sql);
+        $stmt->execute([
+            $data['announcement'],
+            $data['agent_link_prefix'],
+            $data['custom_draw_interval'],
+            $data['chat_mute_all'],
+            $data['bot_auto_reply_enabled'],
+            $data['login_announcement']
+        ]);
+        echo json_encode(['success' => true, 'message' => 'Settings updated successfully']);
+    }
+    elseif ($action === 'clear_chat') {
+        $db->exec("TRUNCATE TABLE group_chat_messages");
+        echo json_encode(['success' => true, 'message' => 'Chat history cleared']);
     }
 } catch (Exception $e) {
-    if(isset($db) && $db->inTransaction()) $db->rollBack();
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }

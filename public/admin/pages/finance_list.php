@@ -3,23 +3,42 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>财务审核 - PC28 PRO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>账单审核 - 东爷国际 PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .token-box { word-break: break-all; font-family: monospace; }
-        .proof-img-admin { max-width: 100%; border-radius: 1rem; cursor: zoom-in; margin-top: 10px; border: 1px solid #f1f5f9; }
+        body { background-color: #f1f5f9; font-family: -apple-system, sans-serif; }
+        .card-p { background: white; border-radius: 2rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .sidebar-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 1.25rem; transition: 0.2s; color: #94a3b8; font-weight: 900; font-size: 11px; text-transform: uppercase; }
+        .sidebar-item.active { background: #2563eb; color: white; box-shadow: 0 10px 15px -3px rgba(37,99,235,0.2); }
+        .proof-img { max-width: 100%; border-radius: 1.5rem; margin-top: 12px; border: 4px solid #f8fafc; cursor: zoom-in; }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen">
-    <header class="admin-header">
-        <h1>财务审核流水</h1>
-        <button onclick="loadFinance()" class="text-indigo-600"><i class="fas fa-sync-alt"></i></button>
+<body class="pb-32">
+    <header class="bg-white border-b border-slate-200 p-6 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-4">
+            <button onclick="history.back()" class="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 flex items-center justify-center"><i class="fas fa-chevron-left"></i></button>
+            <div>
+                <h1 class="text-sm font-black text-slate-800 uppercase tracking-widest">Finance Audit</h1>
+                <p class="text-[8px] font-black text-blue-500 uppercase tracking-widest">Deposit & Withdrawal Queue</p>
+            </div>
+        </div>
+        <button onclick="loadFinance()" class="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 flex items-center justify-center"><i class="fas fa-sync-alt"></i></button>
     </header>
 
-    <main id="finance-container" class="p-4 space-y-4 pt-2">
-        <div class="p-10 text-center text-slate-300 font-bold text-xs uppercase">同步实时账单中...</div>
+    <main id="finance-container" class="p-6 space-y-6">
+        <div class="p-20 text-center text-slate-200 font-black text-[10px] uppercase italic tracking-[0.2em]">Retrieving Queue...</div>
     </main>
+
+    <!-- Admin Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 pb-8 flex justify-around items-center z-50">
+        <a href="/admin/index.php" class="sidebar-item"><i class="fas fa-th-large"></i></a>
+        <a href="/admin/pages/users.php" class="sidebar-item"><i class="fas fa-users"></i></a>
+        <a href="/admin/pages/finance.php" class="sidebar-item active"><i class="fas fa-money-check-alt"></i></a>
+        <a href="/admin/pages/odds.php" class="sidebar-item"><i class="fas fa-percentage"></i></a>
+        <a href="/admin/pages/lottery_control.php" class="sidebar-item"><i class="fas fa-gamepad"></i></a>
+    </nav>
 
     <script>
         async function loadFinance() {
@@ -27,74 +46,53 @@
                 const res = await fetch('/admin/api/finance_list_all.php').then(r => r.json());
                 if(res.success) {
                     const container = document.getElementById('finance-container');
+                    if(res.data.length === 0) {
+                        container.innerHTML = `<div class="p-20 text-center text-slate-200 font-black text-[10px] uppercase italic tracking-widest">Queue is empty</div>`;
+                        return;
+                    }
                     container.innerHTML = res.data.map(f => {
-                        const isDeposit = f.type === 'deposit';
-                        const statusColor = f.status === 'pending' ? 'bg-amber-50 text-amber-600' : (f.status === 'approved' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600');
-
-                        let proofHtml = '';
+                        const isDep = f.type === 'deposit';
+                        const statusColor = f.status === 'pending' ? 'bg-amber-50 text-amber-500' : (f.status === 'approved' ? 'bg-emerald-50 text-emerald-500' : 'bg-rose-50 text-rose-500');
+                        let proof = '';
                         if(f.proof_img) {
-                            if(f.proof_img.includes('data:image')) {
-                                proofHtml = `<img src="${f.proof_img}" class="proof-img-admin" onclick="window.open(this.src)">`;
-                            } else {
-                                proofHtml = `<div class="token-box text-xs font-black text-slate-800 select-all">${f.proof_img}</div>
-                                             <button onclick="copyToClipboard('${f.proof_img}')" class="mt-3 text-[9px] font-black text-blue-600 uppercase border-b-2 border-blue-100 pb-0.5">复制详细信息</button>`;
-                            }
+                            if(f.proof_img.startsWith('data:image')) proof = `<img src="${f.proof_img}" class="proof-img" onclick="window.open(this.src)">`;
+                            else proof = `<div class="mt-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 font-black text-[10px] text-slate-600 break-all">${f.proof_img}</div>`;
                         }
 
                         return `
-                            <div class="card p-6 border border-slate-100 shadow-sm relative overflow-hidden">
-                                <div class="flex justify-between items-start mb-4">
+                            <div class="card-p p-8">
+                                <div class="flex justify-between items-start mb-6">
                                     <div>
-                                        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">${isDeposit ? '📥 充值上分' : '📤 提现回分'}</p>
-                                        <h3 class="text-lg font-black text-slate-800">¥ ${parseFloat(f.amount).toLocaleString()}</h3>
+                                        <p class="text-[9px] font-black uppercase tracking-widest mb-1 ${isDep ? 'text-emerald-500' : 'text-rose-500'}">${isDep ? 'Incoming Deposit' : 'Withdrawal Request'}</p>
+                                        <h3 class="text-2xl font-black text-slate-800">¥ ${parseFloat(f.amount).toLocaleString()}</h3>
                                     </div>
-                                    <span class="px-3 py-1 rounded-lg text-[9px] font-black uppercase ${statusColor}">${f.status}</span>
+                                    <span class="px-4 py-1.5 rounded-xl text-[8px] font-black uppercase tracking-widest ${statusColor}">${f.status}</span>
                                 </div>
-
-                                <div class="space-y-3">
-                                    <p class="text-[10px] font-bold text-slate-500 uppercase">会员: <span class="text-slate-800 font-black">${f.username} (UID: ${f.user_id})</span></p>
-                                    <p class="text-[10px] font-bold text-slate-500 uppercase">时间: ${f.created_at}</p>
-
-                                    ${isDeposit ? `
-                                        <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
-                                            <p class="text-[8px] font-black text-indigo-500 uppercase mb-2">支付宝口令 / 凭证</p>
-                                            ${proofHtml}
-                                        </div>
-                                    ` : `<div class="text-[10px] font-bold text-slate-500 uppercase">回分方式/账号: <span class="text-rose-600 font-black">${f.proof_img}</span></div>`}
+                                <div class="space-y-3 mb-6">
+                                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Member: <span class="text-slate-800">${f.username} (ID: ${f.user_id})</span></p>
+                                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Date: <span class="text-slate-800">${f.created_at}</span></p>
+                                    ${proof}
                                 </div>
-
                                 ${f.status === 'pending' ? `
-                                    <div class="flex gap-3 mt-6 pt-6 border-t border-slate-50">
-                                        <button onclick="review(${f.id}, 'approved')" class="flex-1 py-3 bg-indigo-600 text-white rounded-xl font-black text-[10px] uppercase shadow-lg shadow-indigo-100">确认入账</button>
-                                        <button onclick="review(${f.id}, 'rejected')" class="flex-1 py-3 bg-slate-100 text-slate-400 rounded-xl font-black text-[10px] uppercase">驳回</button>
+                                    <div class="flex gap-4 pt-6 border-t border-slate-50">
+                                        <button onclick="review(${f.id}, 'approved')" class="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-blue-100">Approve</button>
+                                        <button onclick="review(${f.id}, 'rejected')" class="flex-1 py-4 bg-slate-50 text-slate-400 rounded-2xl font-black text-[10px] uppercase tracking-widest border border-slate-100">Reject</button>
                                     </div>
-                                ` : (f.status === 'rejected' ? `<p class="mt-4 text-[9px] font-black text-rose-400 uppercase">原因: ${f.refusal_reason || '无'}</p>` : '')}
+                                ` : ''}
                             </div>
                         `;
                     }).join('');
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) {}
         }
 
         async function review(id, status) {
-            let reason = '';
-            if(status === 'rejected') reason = prompt('请输入驳回原因:');
-
+            let reason = ''; if(status === 'rejected') reason = prompt('Reject reason:');
             const res = await fetch('/admin/api/finance_review.php', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: `id=${id}&status=${status}&reason=${reason}`
+                method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: "id=" + id + "&status=" + status + "&reason=" + encodeURIComponent(reason || '')
             }).then(r => r.json());
-
-            if(res.success) {
-                alert('状态已更新');
-                loadFinance();
-            } else alert(res.message);
-        }
-
-        function copyToClipboard(text) {
-            const clean = text.replace('口令: ', '');
-            navigator.clipboard.writeText(clean).then(() => alert('内容已复制'));
+            if(res.success) loadFinance(); else alert(res.message);
         }
 
         loadFinance();

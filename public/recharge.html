@@ -2,79 +2,94 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>积分充值 - PC28</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>积分充值 - 东爷国际</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #f8fafc; font-family: -apple-system, sans-serif; }
-        .card { background: white; border-radius: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; }
+        body { background-color: #f1f5f9; font-family: -apple-system, sans-serif; }
+        .card-p { background: white; border-radius: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; }
+        .bonus-tag { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); color: white; padding: 2px 8px; border-radius: 6px; font-size: 8px; font-weight: 900; }
     </style>
 </head>
-<body class="p-6">
-    <header class="flex items-center gap-4 mb-8">
-        <button onclick="history.back()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-400 shadow-sm"><i class="fas fa-chevron-left text-xs"></i></button>
-        <h1 class="text-xl font-black text-slate-800">积分充值</h1>
+<body class="p-6 pb-12">
+    <header class="flex items-center justify-between mb-8">
+        <div class="flex items-center gap-4">
+            <button onclick="history.back()" class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-slate-400 shadow-sm border border-slate-100"><i class="fas fa-chevron-left text-sm"></i></button>
+            <div>
+                <h1 class="text-lg font-black text-slate-800">积分充值</h1>
+                <p class="text-[8px] font-black text-slate-300 uppercase tracking-widest">Deposit Funds</p>
+            </div>
+        </div>
+        <i class="fas fa-wallet text-slate-200 text-3xl"></i>
     </header>
 
     <div class="space-y-6">
-        <div class="card p-6">
-            <h3 class="text-[10px] font-black text-slate-400 uppercase mb-4 tracking-widest">充值福利说明</h3>
-            <div class="space-y-2 text-[11px] font-bold text-slate-600 leading-relaxed">
-                <p class="text-blue-600">✨ 新人注册首充 20 送 21 [仅一次]</p>
-                <p>🎁 每日首次充值福利：</p>
-                <div class="grid grid-cols-2 gap-2 opacity-80">
-                    <p>• 10 送 1</p><p>• 20 送 4</p>
-                    <p>• 30 送 10</p><p>• 40 送 12</p>
-                    <p>• 50 送 20</p><p>• 100 送 60</p>
+        <!-- Bonus Info -->
+        <div class="card-p p-8">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center"><i class="fas fa-gift"></i></div>
+                <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest">充值超值福利</h3>
+            </div>
+            <div class="space-y-4">
+                <div class="p-4 bg-blue-50 rounded-2xl flex justify-between items-center">
+                    <span class="text-xs font-bold text-blue-700">新人首充福利</span>
+                    <span class="bonus-tag">充 20 送 21</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center"><span class="text-[10px] font-bold">10 送 1</span><i class="fas fa-check-circle text-blue-400 text-[10px]"></i></div>
+                    <div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center"><span class="text-[10px] font-bold">20 送 4</span><i class="fas fa-check-circle text-blue-400 text-[10px]"></i></div>
+                    <div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center"><span class="text-[10px] font-bold">50 送 20</span><i class="fas fa-check-circle text-blue-400 text-[10px]"></i></div>
+                    <div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center"><span class="text-[10px] font-bold">100 送 60</span><i class="fas fa-check-circle text-blue-400 text-[10px]"></i></div>
                 </div>
             </div>
         </div>
 
-        <div class="card p-6 space-y-4">
-            <div>
-                <label class="text-[10px] font-black text-slate-300 uppercase mb-2 block">充值金额 (最低15)</label>
-                <input type="number" id="amount" class="w-full bg-slate-50 border border-slate-100 p-4 rounded-xl font-black text-slate-800 outline-none" placeholder="输入金额">
+        <!-- Form -->
+        <div class="card-p p-8 space-y-6">
+            <div class="space-y-3">
+                <label class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">充值金额 (Min. 15)</label>
+                <div class="relative flex items-center">
+                    <span class="absolute left-5 text-slate-300 font-black">¥</span>
+                    <input type="number" id="amount" class="w-full bg-slate-50 border border-slate-100 p-5 pl-10 rounded-2xl font-black text-slate-800 outline-none focus:border-blue-400 transition-colors" placeholder="0.00">
+                </div>
             </div>
-            <div>
-                <label class="text-[10px] font-black text-slate-300 uppercase mb-2 block">支付详情 / 红包口令</label>
-                <input type="text" id="token" class="w-full bg-slate-50 border border-slate-100 p-4 rounded-xl font-black text-slate-800 outline-none" placeholder="输入口令或支付描述">
+
+            <div class="space-y-3">
+                <label class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">口令 / 备注信息</label>
+                <input type="text" id="token" class="w-full bg-slate-50 border border-slate-100 p-5 rounded-2xl font-black text-slate-800 outline-none focus:border-blue-400 transition-colors" placeholder="输入口令或支付说明">
             </div>
-            <div>
-                <label class="text-[10px] font-black text-slate-300 uppercase mb-2 block">上传支付凭证 (可选)</label>
-                <div class="relative w-full h-40 bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center cursor-pointer overflow-hidden" onclick="document.getElementById('proof').click()">
-                    <i class="fas fa-camera text-slate-300 text-2xl mb-2"></i>
-                    <p class="text-[9px] font-black text-slate-400">点击拍照或上传</p>
-                    <img id="preview" class="hidden absolute inset-0 w-full h-full object-contain p-2 bg-white rounded-xl z-20">
+
+            <div class="space-y-3">
+                <label class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">上传凭证 (Optional)</label>
+                <div class="relative w-full h-44 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2rem] flex flex-col items-center justify-center cursor-pointer overflow-hidden group" onclick="document.getElementById('proof').click()">
+                    <i class="fas fa-cloud-upload-alt text-slate-300 text-3xl mb-3 group-hover:scale-110 transition-transform"></i>
+                    <p class="text-[10px] font-black text-slate-400">点击或拖拽上传截图</p>
+                    <img id="preview" class="hidden absolute inset-0 w-full h-full object-cover p-2 bg-white z-20 rounded-[2rem]">
                 </div>
                 <input type="file" id="proof" class="hidden" accept="image/*" onchange="handleImage(this)">
             </div>
-            <button id="submitBtn" onclick="submitRecharge()" class="w-full py-4 bg-blue-600 text-white rounded-xl font-black text-xs shadow-lg active:scale-95 transition-all">提交充值申请</button>
+
+            <button id="submitBtn" onclick="submitRecharge()" class="w-full py-5 bg-blue-600 text-white rounded-[1.5rem] font-black text-sm shadow-xl shadow-blue-100 active:scale-95 transition-all">提交申请</button>
         </div>
     </div>
 
     <script>
         let base64Image = '';
         function handleImage(input) {
-            const file = input.files[0];
-            if(!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = new Image();
-                img.src = e.target.result;
+            const file = input.files[0]; if(!file) return;
+            const r = new FileReader(); r.onload = (e) => {
+                const img = new Image(); img.src = e.target.result;
                 img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    const max = 600;
-                    let w = img.width, h = img.height;
+                    const c = document.createElement('canvas'); const ctx = c.getContext('2d');
+                    const max = 800; let w = img.width, h = img.height;
                     if(w > h) { if(w > max) { h *= max/w; w = max; } } else { if(h > max) { w *= max/h; h = max; } }
-                    canvas.width = w; canvas.height = h;
-                    ctx.drawImage(img, 0, 0, w, h);
-                    base64Image = canvas.toDataURL('image/jpeg', 0.5);
+                    c.width = w; c.height = h; ctx.drawImage(img, 0, 0, w, h);
+                    base64Image = c.toDataURL('image/jpeg', 0.6);
                     document.getElementById('preview').src = base64Image;
                     document.getElementById('preview').classList.remove('hidden');
                 };
-            };
-            reader.readAsDataURL(file);
+            }; r.readAsDataURL(file);
         }
 
         async function submitRecharge() {
@@ -86,18 +101,12 @@
 
             btn.disabled = true; btn.innerText = '提交中...';
             try {
-                const payload = { amount, token, proof_image: base64Image };
                 const res = await fetch('/api/finance.php?action=recharge', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(payload)
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ amount, token, proof_image: base64Image })
                 }).then(r => r.json());
-
-                if(res.success) {
-                    alert('申请已提交，财务将尽快核实并入账');
-                    history.back();
-                } else alert(res.message);
-            } catch(e) { alert('提交失败，请重试'); }
+                if(res.success) { alert('申请已提交，财务核实后将自动入账'); history.back(); } else alert(res.message);
+            } catch(e) { alert('网络错误'); }
             btn.disabled = false; btn.innerText = '提交申请';
         }
     </script>

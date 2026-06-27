@@ -3,61 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>系统设置 - PC28</title>
+    <title>系统设置 - 东爷国际</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>body { background-color: #f8fafc; font-family: -apple-system, sans-serif; }</style>
+    <style>
+        body { background-color: #f1f5f9; font-family: -apple-system, sans-serif; }
+        .card-p { background: white; border-radius: 2rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+    </style>
 </head>
-<body class="pb-10">
-    <header class="bg-white border-b border-slate-200 p-4 sticky top-0 z-50 flex items-center gap-4">
-        <button onclick="history.back()" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100"><i class="fas fa-chevron-left"></i></button>
-        <h1 class="font-bold text-sm">个人资料与系统设置</h1>
+<body class="p-6 pb-24">
+    <header class="flex items-center gap-4 mb-8">
+        <button onclick="history.back()" class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-slate-400 shadow-sm border border-slate-100"><i class="fas fa-chevron-left text-sm"></i></button>
+        <div>
+            <h1 class="text-lg font-black text-slate-800">系统设置</h1>
+            <p class="text-[8px] font-black text-slate-300 uppercase tracking-widest">System Settings</p>
+        </div>
     </header>
 
-    <main class="p-6 space-y-6">
+    <main class="space-y-6">
         <!-- Profile -->
         <section class="space-y-4">
-            <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-2">个人资料</h3>
-            <div class="bg-white rounded-3xl border border-slate-200 p-6 space-y-4">
-                <div class="space-y-2">
-                    <p class="text-[10px] font-black text-slate-400 uppercase">个性昵称</p>
-                    <input type="text" id="nick-input" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold outline-none focus:border-blue-400" placeholder="设置您的公开昵称">
+            <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">个人资料</h3>
+            <div class="card-p p-8 space-y-6">
+                <div class="space-y-3">
+                    <p class="text-[9px] font-black text-slate-400 uppercase ml-1">个性昵称</p>
+                    <input type="text" id="nick-input" class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-4 text-sm font-bold outline-none focus:border-blue-400" placeholder="设置您的公开昵称">
                 </div>
-                <div class="space-y-2">
-                    <p class="text-[10px] font-black text-slate-400 uppercase">修改登录密码</p>
-                    <input type="password" id="pass-input" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold outline-none focus:border-blue-400" placeholder="留空则不修改">
+                <div class="space-y-3">
+                    <p class="text-[9px] font-black text-slate-400 uppercase ml-1">修改登录密码</p>
+                    <input type="password" id="pass-input" class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-4 text-sm font-bold outline-none focus:border-blue-400" placeholder="留空则不修改">
                 </div>
-                <div class="space-y-2">
-                    <p class="text-[10px] font-black text-slate-400 uppercase">绑定 QQ 号 (仅限绑定一次)</p>
-                    <input type="text" id="qq-input" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold outline-none focus:border-blue-400" placeholder="输入 QQ 号">
+                <div class="space-y-3">
+                    <p class="text-[9px] font-black text-slate-400 uppercase ml-1">绑定 QQ 号 (仅限一次)</p>
+                    <input type="text" id="qq-input" class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-4 text-sm font-bold outline-none focus:border-blue-400" placeholder="输入 QQ 号">
                 </div>
             </div>
         </section>
 
         <!-- Theme Customization -->
         <section class="space-y-4">
-            <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-2">视觉风格定制</h3>
-            <div class="bg-white rounded-3xl border border-slate-200 p-6 space-y-6">
+            <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">视觉风格定制</h3>
+            <div class="card-p p-8 space-y-6">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-black text-slate-700">主色调</span>
-                    <input type="color" id="theme-color" value="#2563eb" class="w-10 h-10 rounded-lg cursor-pointer">
+                    <span class="text-xs font-black text-slate-700">全局主色调</span>
+                    <input type="color" id="theme-color" value="#2563eb" class="w-12 h-12 rounded-xl cursor-pointer border-none bg-transparent">
                 </div>
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-black text-slate-700">常规数字颜色</span>
-                    <input type="color" id="num-color" value="#334155" class="w-10 h-10 rounded-lg cursor-pointer">
+                    <input type="color" id="num-color" value="#334155" class="w-12 h-12 rounded-xl cursor-pointer border-none bg-transparent">
                 </div>
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-black text-slate-700">大小单双颜色</span>
-                    <input type="color" id="bssd-color" value="#2563eb" class="w-10 h-10 rounded-lg cursor-pointer">
+                    <input type="color" id="bssd-color" value="#2563eb" class="w-12 h-12 rounded-xl cursor-pointer border-none bg-transparent">
                 </div>
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-black text-slate-700">组合特殊颜色</span>
-                    <input type="color" id="special-color" value="#dc2626" class="w-10 h-10 rounded-lg cursor-pointer">
+                    <input type="color" id="special-color" value="#dc2626" class="w-12 h-12 rounded-xl cursor-pointer border-none bg-transparent">
                 </div>
             </div>
         </section>
 
-        <button onclick="saveSettings()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg shadow-blue-200 active:scale-95 transition-all">确认修改设置</button>
+        <button onclick="saveSettings()" class="w-full bg-blue-600 text-white py-5 rounded-[1.5rem] font-black shadow-xl shadow-blue-100 active:scale-95 transition-all mt-4">确认修改</button>
     </main>
 
     <script>
@@ -67,10 +73,8 @@
                 const u = r.user;
                 document.getElementById('nick-input').value = u.nickname || '';
                 if(u.qq_number) {
-                    const qq = document.getElementById('qq-input');
-                    qq.value = u.qq_number;
-                    qq.readOnly = true;
-                    qq.style.opacity = '0.5';
+                    const q = document.getElementById('qq-input');
+                    q.value = u.qq_number; q.readOnly = true; q.style.opacity = '0.5';
                 }
                 if(u.settings_json) {
                     const s = JSON.parse(u.settings_json);
@@ -95,13 +99,10 @@
                 password: document.getElementById('pass-input').value,
                 theme_settings: theme
             };
-
             const res = await fetch('/api/update_profile.php', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(payload)
             }).then(r => r.json());
-
             if(res.success) { alert('设置已更新'); location.href = '/profile.html'; }
             else alert(res.message);
         }
